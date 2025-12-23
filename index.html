@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Manager в сфере раздевалок</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-white: #FFFFFF;
+            --primary-black: #1A1A1A;
+            --primary-bordeaux: #800020;
+            --secondary-bordeaux: #9B2D3A;
+            --light-bordeaux: #B03060;
+            --accent-gold: #D4AF37;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --dark-gray: #333333;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 15px 40px rgba(128, 0, 32, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--dark-gray);
+            background-color: var(--primary-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--primary-black);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        /* Шапка сайта */
+        header {
+            background-color: var(--primary-white);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            transition: var(--transition);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: var(--primary-bordeaux);
+            font-size: 28px;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--primary-black);
+        }
+
+        .logo-text span {
+            color: var(--primary-bordeaux);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 40px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--primary-black);
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--primary-bordeaux);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-bordeaux);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .header-cta {
+            background-color: var(--primary-bordeaux);
+            color: var(--primary-white);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .header-cta:hover {
+            background-color: var(--secondary-bordeaux);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--primary-bordeaux);
+            cursor: pointer;
+        }
+
+        /* Герой секция */
+        .hero {
+            background: linear-gradient(rgba(26, 26, 26, 0.85), rgba(26, 26, 26, 0.9)), url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--primary-white);
+            padding: 180px 0 120px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-bordeaux), var(--accent-gold), var(--primary-bordeaux));
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.3s;
+        }
+
+        .hero-title span {
+            color: var(--accent-gold);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.5s;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            background-color: var(--primary-bordeaux);
+            color: var(--primary-white);
+            padding: 18px 42px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: none;
+            transition: var(--transition);
+            margin: 10px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.7s;
+        }
+
+        .hero-cta:hover {
+            background-color: var(--secondary-bordeaux);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .hero-cta.secondary {
+            background-color: transparent;
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .hero-cta.secondary:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+
+        /* Секция о нас */
+        .about {
+            background-color: var(--light-gray);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-bordeaux);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            max-width: 700px;
+            margin: 30px auto 60px;
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 60px;
+        }
+
+        .about-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--primary-bordeaux);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-bordeaux);
+            margin-bottom: 10px;
+        }
+
+        .stat-text {
+            font-size: 1rem;
+            color: var(--dark-gray);
+        }
+
+        .about-image {
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .about-image:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Секция партнеров */
+        .partners {
+            background-color: var(--primary-white);
+        }
+
+        .partners-logos {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 60px;
+        }
+
+        .partner-logo {
+            width: 180px;
+            height: 80px;
+            margin: 20px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partner-logo::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(128, 0, 32, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .partner-logo:hover::before {
+            transform: translateX(100%);
+        }
+
+        .partner-logo:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .partner-logo i {
+            font-size: 2.5rem;
+            color: var(--dark-gray);
+        }
+
+        /* Секция преимуществ */
+        .advantages {
+            background-color: var(--light-gray);
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .advantage-card {
+            background-color: var(--primary-white);
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advantage-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--primary-bordeaux);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .advantage-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .advantage-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .advantage-icon {
+            font-size: 3rem;
+            color: var(--primary-bordeaux);
+            margin-bottom: 25px;
+        }
+
+        .advantage-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* Секция преподавателей */
+        .teachers {
+            background-color: var(--primary-white);
+        }
+
+        .teachers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .teacher-card {
+            background-color: var(--primary-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .teacher-image {
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .teacher-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .teacher-card:hover .teacher-image img {
+            transform: scale(1.05);
+        }
+
+        .teacher-info {
+            padding: 30px;
+        }
+
+        .teacher-name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-bordeaux);
+        }
+
+        .teacher-position {
+            font-size: 1rem;
+            color: var(--secondary-bordeaux);
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .teacher-description {
+            color: var(--dark-gray);
+        }
+
+        /* Секция архитектуры */
+        .architecture {
+            background-color: var(--light-gray);
+        }
+
+        .architecture-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 60px;
+        }
+
+        .architecture-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .architecture-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--primary-bordeaux);
+        }
+
+        .architecture-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .architecture-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .architecture-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-bordeaux);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .architecture-image {
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .architecture-image:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .architecture-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Секция CTA */
+        .cta-section {
+            background: linear-gradient(rgba(128, 0, 32, 0.9), rgba(155, 45, 58, 0.9)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--primary-white);
+            text-align: center;
+            padding: 120px 0;
+        }
+
+        .cta-title {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .cta-button {
+            background-color: var(--accent-gold);
+            color: var(--primary-black);
+            border: none;
+            padding: 18px 42px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-white);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Футер */
+        footer {
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            padding: 80px 0 30px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            color: var(--primary-white);
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-bordeaux);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--medium-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-bordeaux);
+            padding-left: 5px;
+        }
+
+        .footer-contact p {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-contact i {
+            margin-right: 10px;
+            color: var(--primary-bordeaux);
+        }
+
+        .social-icons {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 15px;
+            color: var(--primary-white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--primary-bordeaux);
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Анимации */
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .about-content, .architecture-content {
+                flex-direction: column;
+            }
+
+            .about-text, .architecture-text {
+                padding-right: 0;
+                margin-bottom: 40px;
+            }
+
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .teachers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary-white);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav li {
+                margin: 0 0 20px 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .header-cta {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2.3rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .partner-logo {
+                width: 140px;
+                height: 70px;
+                margin: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-cta {
+                display: block;
+                margin: 10px auto;
+                width: 90%;
+                max-width: 300px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <div class="logo-icon"><i class="fas fa-project-diagram"></i></div>
+                <div class="logo-text">PM<span>SHOWER</span></div>
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#about">О нас</a></li>
+                    <li><a href="#advantages">Преимущества</a></li>
+                    <li><a href="#teachers">Преподаватели</a></li>
+                    <li><a href="#partners">Партнеры</a></li>
+                </ul>
+            </nav>
+            
+            <button class="header-cta">Начать обучение</button>
+        </div>
+    </header>
+
+    <!-- Герой секция -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title"> <span>Project Manager в сфере раздевалок </span></h1>
+            <p class="hero-subtitle">Станьте высокооплачиваемым специалистом в уникальной нише проектирования и управления строительством современных душевых, туалетных и раздевальных комплексов</p>
+            <a href="#cta" class="hero-cta">Начать карьеру</a>
+            <a href="#about" class="hero-cta secondary">Узнать больше</a>
+        </div>
+    </section>
+
+    <!-- Секция о нас -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Почему выбирают нас</h2>
+            <p class="section-subtitle animate-on-scroll">Мы на рынке образовательных услуг более 15 лет, обучили специалистов из 28 стран и продолжаем развивать инновационные методы подготовки Project Manager'ов в специфической сфере сантехнических и раздевальных комплексов.</p>
+            
+            <div class="about-content">
+                <div class="about-text animate-on-scroll">
+                    <h3>Экспертиза в уникальной нише</h3>
+                    <p>Мы специализируемся исключительно на подготовке менеджеров проектов в области строительства и реконструкции душевых, туалетных и раздевальных помещений. Наша программа учитывает все технические, архитектурные и управленческие аспекты этой специфической сферы.</p>
+                    <p>Свободный график обучения позволяет совмещать учебу с работой, а наша методика гарантирует освоение всех необходимых технологий проектирования, монтажа и управления.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-text">лет на рынке</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">28</div>
+                            <div class="stat-text">стран обучения</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">96%</div>
+                            <div class="stat-text">трудоустройство</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Современный душевой комплекс">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция партнеров -->
+    <section class="partners" id="partners">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">С нами сотрудничают</h2>
+            <p class="section-subtitle animate-on-scroll">Крупнейшие компании в сфере строительства и проектирования общественных пространств доверяют подготовку своих специалистов нашей академии.</p>
+            
+            <div class="partners-logos">
+                <div class="partner-logo animate-on-scroll">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="partner-logo animate-on-scroll">
+                    <i class="fas fa-hard-hat"></i>
+                </div>
+                <div class="partner-logo animate-on-scroll">
+                    <i class="fas fa-industry"></i>
+                </div>
+                <div class="partner-logo animate-on-scroll">
+                    <i class="fas fa-city"></i>
+                </div>
+                <div class="partner-logo animate-on-scroll">
+                    <i class="fas fa-water"></i>
+                </div>
+                <div class="partner-logo animate-on-scroll">
+                    <i class="fas fa-tools"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция преимуществ -->
+    <section class="advantages" id="advantages">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Наши преимущества</h2>
+            <p class="section-subtitle animate-on-scroll">Выпускники нашей программы востребованы на рынке благодаря уникальным знаниям и практическим навыкам, которые они получают во время обучения.</p>
+            
+            <div class="advantages-grid">
+                <div class="advantage-card animate-on-scroll">
+                    <div class="advantage-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="advantage-title">Высокая востребованность</h3>
+                    <p>96% наших выпускников трудоустраиваются в течение месяца после завершения обучения благодаря узкой специализации.</p>
+                </div>
+                
+                <div class="advantage-card animate-on-scroll">
+                    <div class="advantage-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="advantage-title">Международный охват</h3>
+                    <p>Мы обучаем специалистов со всего мира, адаптируя программу под различные строительные стандарты и нормативы.</p>
+                </div>
+                
+                <div class="advantage-card animate-on-scroll">
+                    <div class="advantage-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="advantage-title">Свободный график</h3>
+                    <p>Гибкое расписание занятий позволяет совмещать обучение с работой. Все материалы доступны 24/7.</p>
+                </div>
+                
+                <div class="advantage-card animate-on-scroll">
+                    <div class="advantage-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="advantage-title">Современные технологии</h3>
+                    <p>Освоение всех необходимых технологий проектирования, BIM-моделирования и управления проектами.</p>
+                </div>
+                
+                <div class="advantage-card animate-on-scroll">
+                    <div class="advantage-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="advantage-title">Практика с первого дня</h3>
+                    <p>Реальные кейсы и проекты от наших партнеров. Работа с действующей документацией и оборудованием.</p>
+                </div>
+                
+                <div class="advantage-card animate-on-scroll">
+                    <div class="advantage-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="advantage-title">Карьерный рост</h3>
+                    <p>Выпускники становятся руководителями проектов в ведущих строительных и проектных компаниях.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция преподавателей -->
+    <section class="teachers" id="teachers">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Наши преподаватели</h2>
+            <p class="section-subtitle animate-on-scroll">Профессионалы с многолетним опытом работы в проектировании и строительстве сантехнических и раздевальных комплексов.</p>
+            
+            <div class="teachers-grid">
+                <div class="teacher-card animate-on-scroll">
+                    <div class="teacher-image">
+                        <img src="images/Тема 3.png" alt="Эксперт по архитектуре душевых и туалетов">
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Петр Матвеев</h3>
+                        <span class="teacher-position">Эксперт по архитектуре душевых и туалетов</span>
+                        <p class="teacher-description">20 лет опыта в проектировании общественных сантехнических помещений. Автор 15 запатентованных решений в области водоснабжения и канализации.</p>
+                    </div>
+                </div>
+                
+                <div class="teacher-card animate-on-scroll">
+                    <div class="teacher-image">
+                        <img src="images/Тема 2.png" alt="Главный менеджер проекта">
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Игорь Львов</h3>
+                        <span class="teacher-position">Главный менеджер проекта</span>
+                        <p class="teacher-description">Руководил 50+ проектами строительства спортивных комплексов и общественных бань. Специалист по управлению бюджетом и сроками.</p>
+                    </div>
+                </div>
+                
+                <div class="teacher-card animate-on-scroll">
+                    <div class="teacher-image">
+                        <img src="images/Тема.png" alt="Технический директор">
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Шапошников Григорий</h3>
+                        <span class="teacher-position">Технический директор</span>
+                        <p class="teacher-description">Эксперт по современным сантехническим технологиям и материалам. Разработал стандарты монтажа для 10 крупных сетей фитнес-центров.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция архитектуры -->
+    <section class="architecture" id="architecture">
+        <div class="container">
+            <div class="architecture-content">
+                <div class="architecture-text animate-on-scroll">
+                    <h3>Инновационные подходы к проектированию</h3>
+                    <p>Наша методология основана на принципах устойчивого развития, энергоэффективности и максимального комфорта пользователей. Мы учим создавать пространства, которые служат десятилетиями.</p>
+                    
+                    <ul class="architecture-list">
+                        <li>Биоразлагаемые и экологичные материалы</li>
+                        <li>Системы рециркуляции и очистки воды</li>
+                        <li>Энергосберегающие технологии подогрева</li>
+                        <li>Универсальный дизайн для людей с ограниченными возможностями</li>
+                        <li>Умные системы управления микроклиматом</li>
+                        <li>Противоскользящие и антибактериальные покрытия</li>
+                    </ul>
+                </div>
+                
+                <div class="architecture-image animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Архитектура современного сантехнического комплекса">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция CTA -->
+    <section class="cta-section" id="cta">
+        <div class="container">
+            <h2 class="cta-title animate-on-scroll">Готовы стать востребованным специалистом?</h2>
+            <p class="cta-subtitle animate-on-scroll">Присоединяйтесь к нашей программе и начните карьеру в перспективной нише с высоким доходом и возможностями для международной карьеры.</p>
+            <button class="cta-button animate-on-scroll">Начать обучение бесплатно</button>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>PM SHOWER</h3>
+                    <p>Ведущая образовательная платформа по подготовке Project Manager'ов в сфере сантехнических и раздевальных комплексов.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="#about">О нас</a></li>
+                        <li><a href="#advantages">Преимущества</a></li>
+                        <li><a href="#teachers">Преподаватели</a></li>
+                        <li><a href="#partners">Партнеры</a></li>
+                        <li><a href="#architecture">Архитектура</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i> Москва, ул. Строителей, 15</p>
+                        <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                        <p><i class="fas fa-envelope"></i> info@pmshower.academy</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2023 PM SHOWER Academy. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Мобильное меню
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            mobileMenuBtn.innerHTML = mainNav.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Закрытие меню при клике на ссылку
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // Изменение шапки при скролле
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Анимация при скролле
+        const animateElements = document.querySelectorAll('.animate-on-scroll');
+        
+        const checkScroll = () => {
+            animateElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('animated');
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+        
+        // Плавная прокрутка к якорям
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            // Запуск анимации для элементов в видимой области
+            checkScroll();
+        });
+    </script>
+</body>
+</html>
